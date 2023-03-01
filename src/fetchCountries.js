@@ -4,36 +4,40 @@ const countriesList = document.querySelector('.country-list');
 const countryInfo = document.querySelector('.country-info');
 
 function fetchCountries(value) {
-  fetch(
-    `https://restcountries.com/v3.1/name/${value}?fields=name,capital,population,flags,languages`
-  )
-    .then(response => {
-      if (!response.ok) {
-        clearCountryInfo();
-        clearCountriesList();
-        throw new Error(
-          Notiflix.Notify.failure('Oops, there is no country with that name')
-        );
-      }
-      return response.json();
-    })
-    .then(data => {
-      if (data.length > 10) {
-        Notiflix.Notify.info(
-          'Too many matches found. Please enter a more specific name.'
-        );
-        clearCountriesList();
-      } else if (data.length >= 2 && data.length <= 10) {
-        createCountryList(data);
-        clearCountryInfo();
-      } else {
-        createCountryInfo(data);
-        clearCountriesList();
-      }
-    })
-    .catch(err => {
-      console.log(err);
-    });
+  if (value !== '') {
+    fetch(
+      `https://restcountries.com/v3.1/name/${value}?fields=name,capital,population,flags,languages`
+    )
+      .then(response => {
+        if (!response.ok) {
+          clearCountryInfo();
+          clearCountriesList();
+          throw new Error(
+            Notiflix.Notify.failure('Oops, there is no country with that name')
+          );
+        }
+        return response.json();
+      })
+      .then(data => {
+        if (data.length > 10) {
+          clearCountriesList();
+          Notiflix.Notify.info(
+            'Too many matches found. Please enter a more specific name.'
+          );
+        } else if (data.length >= 2 && data.length <= 10) {
+          createCountryList(data);
+          clearCountryInfo();
+        } else {
+          createCountryInfo(data);
+          clearCountriesList();
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  } else {
+    clearCountriesList();
+  }
 }
 
 function clearCountriesList() {

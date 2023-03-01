@@ -18,3 +18,12 @@ body {
   max-width: 320px;
   margin-bottom: 16px;
 }
+
+.country-item {
+  list-style: none;
+}
+
+.country-text,
+.country-image {
+  margin-right: 10px;
+}
